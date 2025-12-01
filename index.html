@@ -762,7 +762,7 @@
                 <div class="company-info">
                     105 Conant St, Danvers, MA 01923<br>
                     (978) 774-4224<br>
-                    haibonbuilders1977@gmail.com
+                    <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="acc4cdc5cec3c2ced9c5c0c8c9dedf9d959b9beccbc1cdc5c082cfc3c1">[email&#160;protected]</a>
                 </div>
             </div>
         </div>
@@ -866,7 +866,7 @@
 <!-- Toast Notification -->
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ========== State ==========
     let currentDoc = {
         id: null,
@@ -991,196 +991,186 @@
     // ========== Local Voice Parsing (No API needed!) ==========
     function parseVoiceInput(transcript) {
         const text = transcript.toLowerCase().trim();
+        const originalText = transcript.trim();
         let itemsFound = 0;
         
-        // Word-to-number conversion
-        const wordNumbers = {
-            'zero': 0, 'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
-            'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
-            'eleven': 11, 'twelve': 12, 'thirteen': 13, 'fourteen': 14, 'fifteen': 15,
-            'sixteen': 16, 'seventeen': 17, 'eighteen': 18, 'nineteen': 19, 'twenty': 20,
-            'thirty': 30, 'forty': 40, 'fifty': 50, 'sixty': 60, 'seventy': 70,
-            'eighty': 80, 'ninety': 90, 'hundred': 100, 'thousand': 1000
-        };
-
-        function convertWordsToNumber(str) {
-            // First try direct number
-            const directNum = parseFloat(str.replace(/[,$]/g, ''));
-            if (!isNaN(directNum)) return directNum;
-            
-            // Handle patterns like "twelve hundred", "fifteen hundred"
-            const hundredMatch = str.match(/(\w+)\s+hundred/);
-            if (hundredMatch) {
-                const base = wordNumbers[hundredMatch[1]];
-                if (base !== undefined) {
-                    return base * 100;
-                }
-            }
-            
-            // Handle patterns like "two thousand"
-            const thousandMatch = str.match(/(\w+)\s+thousand/);
-            if (thousandMatch) {
-                const base = wordNumbers[thousandMatch[1]];
-                if (base !== undefined) {
-                    let total = base * 1000;
-                    // Check for additional hundreds
-                    const addHundred = str.match(/thousand\s+(\w+)\s+hundred/);
-                    if (addHundred && wordNumbers[addHundred[1]]) {
-                        total += wordNumbers[addHundred[1]] * 100;
-                    }
-                    return total;
-                }
-            }
-            
-            // Handle compound numbers like "twenty five"
-            let total = 0;
-            const words = str.split(/\s+/);
-            for (const word of words) {
-                if (wordNumbers[word] !== undefined) {
-                    if (word === 'hundred') {
-                        total = total === 0 ? 100 : total * 100;
-                    } else if (word === 'thousand') {
-                        total = total === 0 ? 1000 : total * 1000;
-                    } else {
-                        total += wordNumbers[word];
-                    }
-                }
-            }
-            
-            return total > 0 ? total : null;
+        console.log('Parsing transcript:', text);
+        
+        // Helper: Convert price strings to numbers
+        function parsePrice(str) {
+            if (!str) return null;
+            // Remove $ and commas, parse as float
+            const cleaned = str.replace(/[$,]/g, '').trim();
+            const num = parseFloat(cleaned);
+            return isNaN(num) ? null : num;
         }
-
-        // Extract customer name
-        // Patterns: "customer John Smith", "for John Smith", "client John Smith"
-        const customerPatterns = [
-            /(?:customer|client|for)\s+([a-z]+(?:\s+[a-z]+){0,3})(?:\s+at|\s+address|\s+project|\s+\d|$)/i,
-            /(?:customer|client|for)\s+([a-z]+(?:\s+[a-z]+){0,3})/i
+        
+        // Helper: Capitalize words
+        function capitalize(str) {
+            return str.split(' ')
+                .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+                .join(' ');
+        }
+        
+        // ===== 1. Extract Phone Number =====
+        // Patterns: 978-555-1212, 978.555.1212, 9785551212, (978) 555-1212
+        const phonePatterns = [
+            /\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/,
+            /\d{3}[-.\s]\d{2,3}[-.\s]\d{4}/
+        ];
+        for (const pattern of phonePatterns) {
+            const phoneMatch = text.match(pattern);
+            if (phoneMatch) {
+                document.getElementById('customerContact').value = phoneMatch[0];
+                console.log('Found phone:', phoneMatch[0]);
+                break;
+            }
+        }
+        
+        // ===== 2. Extract Price (dollar amounts) =====
+        // Look for: $12,000 or $12000 or 12,000 dollars or "for $X"
+        const pricePatterns = [
+            /\$[\d,]+(?:\.\d{2})?/g,
+            /(?:for|total|price|cost|quote)\s*\$?(\d[\d,]*(?:\.\d{2})?)/gi,
+            /(\d{1,3}(?:,\d{3})+(?:\.\d{2})?)\s*(?:dollars?|bucks?)?/g,
+            /(\d{4,}(?:\.\d{2})?)\s*(?:dollars?|bucks?)?/g
         ];
         
-        for (const pattern of customerPatterns) {
-            const match = text.match(pattern);
-            if (match) {
-                const name = match[1].trim();
-                // Filter out keywords that might be captured
-                const keywords = ['at', 'address', 'project', 'labor', 'tile', 'materials'];
-                const cleanName = name.split(' ').filter(w => !keywords.includes(w.toLowerCase())).join(' ');
-                if (cleanName) {
-                    // Capitalize each word
-                    const formattedName = cleanName.split(' ')
-                        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                        .join(' ');
-                    document.getElementById('customerName').value = formattedName;
+        let foundPrice = null;
+        let priceDescription = null;
+        
+        // First, look for "X for $Y" pattern (e.g., "kitchen remodel for $12,000")
+        const descPriceMatch = text.match(/([a-z][a-z\s]+?)\s+(?:for|at|price|cost|quote)?\s*\$?([\d,]+(?:\.\d{2})?)\s*(?:dollars?|bucks?)?$/i);
+        if (descPriceMatch) {
+            priceDescription = descPriceMatch[1].trim();
+            foundPrice = parsePrice(descPriceMatch[2]);
+            console.log('Found desc+price pattern:', priceDescription, foundPrice);
+        }
+        
+        // Also check for standalone price
+        if (!foundPrice) {
+            for (const pattern of pricePatterns) {
+                const matches = text.match(pattern);
+                if (matches) {
+                    for (const m of matches) {
+                        const price = parsePrice(m.replace(/.*?(\$?[\d,]+).*/, '$1'));
+                        if (price && price >= 100) { // Assume prices are at least $100
+                            foundPrice = price;
+                            console.log('Found price:', foundPrice);
+                            break;
+                        }
+                    }
+                }
+                if (foundPrice) break;
+            }
+        }
+        
+        // ===== 3. Extract Address =====
+        // Look for: number + street name (with or without "at")
+        const streetTypes = 'street|st|avenue|ave|road|rd|drive|dr|lane|ln|way|circle|cir|court|ct|boulevard|blvd|place|pl|terrace|ter|highway|hwy';
+        const addressPattern = new RegExp(`(\\d+\\s+[a-z]+(?:\\s+[a-z]+)?\\s+(?:${streetTypes}))`, 'i');
+        const addressMatch = text.match(addressPattern);
+        if (addressMatch) {
+            document.getElementById('customerAddress').value = capitalize(addressMatch[1]);
+            console.log('Found address:', addressMatch[1]);
+        }
+        
+        // ===== 4. Extract Customer Name =====
+        // Look for: "for [Name]" at the beginning, or name patterns before address/phone
+        const namePatterns = [
+            /(?:estimate|invoice|quote)?\s*(?:for|customer|client)\s+([a-z]+\s+[a-z]+)/i,
+            /^(?:new\s+)?(?:estimate|invoice|quote)?\s*(?:for)?\s*([a-z]+\s+[a-z]+)\s+\d/i
+        ];
+        
+        for (const pattern of namePatterns) {
+            const nameMatch = text.match(pattern);
+            if (nameMatch) {
+                const name = nameMatch[1].trim();
+                // Filter out common words that aren't names
+                const notNames = ['kitchen', 'bathroom', 'basement', 'deck', 'roof', 'new', 'estimate', 'invoice', 'high', 'main', 'oak', 'elm', 'maple'];
+                const words = name.split(' ');
+                if (!notNames.includes(words[0].toLowerCase())) {
+                    document.getElementById('customerName').value = capitalize(name);
+                    console.log('Found name:', name);
                     break;
                 }
             }
         }
-
-        // Extract address
-        // Pattern: "at 123 Main Street" or "address 45 Oak St"
-        const addressMatch = text.match(/(?:at|address)\s+([\d]+[^,]*(?:street|st|avenue|ave|road|rd|drive|dr|lane|ln|way|circle|court|ct|boulevard|blvd)[^,]*)/i);
-        if (addressMatch) {
-            const addr = addressMatch[1].trim();
-            // Capitalize
-            const formattedAddr = addr.split(' ')
-                .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                .join(' ');
-            document.getElementById('customerAddress').value = formattedAddr;
-        }
-
-        // Extract project description
-        // Pattern: "project bathroom remodel" or "for bathroom remodel"
-        const projectMatch = text.match(/(?:project|job)\s+([a-z\s]+?)(?:\s+customer|\s+for|\s+at|\s+\d|,|$)/i);
-        if (projectMatch) {
-            const proj = projectMatch[1].trim();
-            const formattedProj = proj.split(' ')
-                .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                .join(' ');
-            document.getElementById('projectDesc').value = formattedProj;
-        }
-
-        // Extract line items with prices
-        // Common construction terms followed by numbers
-        const itemKeywords = [
-            'labor', 'materials', 'tile', 'tiles', 'tiling', 'plumbing', 'electrical',
-            'demolition', 'demo', 'fixtures', 'fixture', 'painting', 'paint',
-            'flooring', 'floor', 'cabinets', 'cabinet', 'countertop', 'countertops',
-            'counter', 'drywall', 'framing', 'trim', 'molding', 'moulding',
-            'deck', 'decking', 'siding', 'roofing', 'roof', 'windows', 'window',
-            'doors', 'door', 'installation', 'install', 'removal', 'repair',
-            'replacement', 'hardware', 'supplies', 'lumber', 'wood', 'concrete',
-            'masonry', 'brick', 'stone', 'granite', 'marble', 'quartz',
-            'appliances', 'appliance', 'sink', 'faucet', 'toilet', 'shower',
-            'tub', 'bathtub', 'vanity', 'lighting', 'lights', 'permit', 'permits',
-            'cleanup', 'disposal', 'hauling', 'delivery', 'work', 'cost'
+        
+        // ===== 5. Extract Project Description =====
+        // Common project types
+        const projectTypes = [
+            'kitchen remodel', 'kitchen renovation', 'bathroom remodel', 'bathroom renovation',
+            'basement finishing', 'basement remodel', 'deck', 'deck building', 'deck repair',
+            'roof repair', 'roofing', 'siding', 'window replacement', 'windows',
+            'door installation', 'flooring', 'hardwood floors', 'tile work', 'tiling',
+            'painting', 'interior painting', 'exterior painting', 'drywall', 'framing',
+            'addition', 'home addition', 'garage', 'shed', 'fence', 'fencing',
+            'plumbing', 'electrical', 'hvac', 'landscaping', 'concrete', 'masonry',
+            'cabinet installation', 'countertops', 'backsplash', 'trim work', 'molding',
+            'remodel', 'renovation', 'repair', 'installation', 'replacement'
         ];
-
-        // Build regex pattern
-        const itemPattern = new RegExp(
-            `((?:${itemKeywords.join('|')})(?:\\s+(?:work|cost|installation|repair|replacement))?)\\s+` +
-            `(\\$?[\\d,]+(?:\\.\\d{2})?|(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand)[\\w\\s]*)`,
-            'gi'
-        );
-
-        // Clear empty line items first
-        const tbody = document.getElementById('lineItemsBody');
-        const existingRows = tbody.querySelectorAll('.line-item-row');
-        existingRows.forEach(row => {
-            const descInput = row.querySelector('input[type="text"]');
-            const amtInput = row.querySelector('input[type="number"]');
-            if (!descInput.value && !amtInput.value) {
-                row.remove();
+        
+        for (const proj of projectTypes) {
+            if (text.includes(proj)) {
+                document.getElementById('projectDesc').value = capitalize(proj);
+                // Use this as line item description if we found a price
+                if (foundPrice && !priceDescription) {
+                    priceDescription = proj;
+                }
+                console.log('Found project:', proj);
+                break;
             }
-        });
-
-        let match;
+        }
+        
+        // ===== 6. Create Line Item if we found a price =====
+        if (foundPrice) {
+            // Clear empty line items first
+            const tbody = document.getElementById('lineItemsBody');
+            const existingRows = tbody.querySelectorAll('.line-item-row');
+            existingRows.forEach(row => {
+                const descInput = row.querySelector('input[type="text"]');
+                const amtInput = row.querySelector('input[type="number"]');
+                if (!descInput.value && !amtInput.value) {
+                    row.remove();
+                }
+            });
+            
+            // Determine description
+            let itemDesc = priceDescription || document.getElementById('projectDesc').value || 'Work';
+            
+            // Clean up description (remove filler words)
+            itemDesc = itemDesc.replace(/\b(for|the|a|an|new|estimate|invoice|quote)\b/gi, '').trim();
+            itemDesc = capitalize(itemDesc);
+            
+            addLineItem(itemDesc, foundPrice);
+            itemsFound++;
+            console.log('Added line item:', itemDesc, foundPrice);
+        }
+        
+        // ===== 7. Look for multiple items (comma or "and" separated) =====
+        // Pattern: "labor 500, materials 300, tile 800"
+        const multiItemPattern = /([a-z]+(?:\s+[a-z]+)?)\s+\$?([\d,]+)/gi;
+        let multiMatch;
         const addedItems = new Set();
         
-        while ((match = itemPattern.exec(text)) !== null) {
-            const description = match[1].trim();
-            const priceStr = match[2].trim();
-            
-            const price = convertWordsToNumber(priceStr);
-            
-            if (price && price > 0) {
-                // Capitalize description
-                const formattedDesc = description.split(' ')
-                    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                    .join(' ');
+        // Only look for multi-items if we haven't found a big single price
+        if (!foundPrice || foundPrice < 1000) {
+            while ((multiMatch = multiItemPattern.exec(text)) !== null) {
+                const desc = multiMatch[1].trim();
+                const price = parsePrice(multiMatch[2]);
                 
-                const itemKey = formattedDesc.toLowerCase() + '-' + price;
-                if (!addedItems.has(itemKey)) {
-                    addLineItem(formattedDesc, price);
+                // Skip if it looks like phone, address, or already added
+                if (!price || price < 50) continue;
+                if (/^\d+$/.test(desc)) continue;
+                if (/street|st|ave|road|rd|drive|dr|lane|ln/i.test(desc)) continue;
+                
+                const itemKey = desc.toLowerCase() + '-' + price;
+                if (!addedItems.has(itemKey) && price !== foundPrice) {
+                    addLineItem(capitalize(desc), price);
                     addedItems.add(itemKey);
                     itemsFound++;
-                }
-            }
-        }
-
-        // Also try to find standalone number patterns like "item description 1500"
-        // Split by commas and "and" to find segments
-        const segments = text.split(/,|\s+and\s+/);
-        for (const segment of segments) {
-            // Look for: words followed by number at end
-            const genericMatch = segment.trim().match(/([a-z][a-z\s]{2,}?)\s+(\$?[\d,]+(?:\.\d{2})?)\s*(?:dollars?|bucks?)?$/i);
-            if (genericMatch) {
-                const desc = genericMatch[1].trim();
-                const priceStr = genericMatch[2];
-                
-                // Skip if it's a known field marker
-                if (/customer|client|for|at|address|project|job/i.test(desc)) continue;
-                
-                const price = convertWordsToNumber(priceStr);
-                if (price && price > 0) {
-                    const formattedDesc = desc.split(' ')
-                        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                        .join(' ');
-                    
-                    const itemKey = formattedDesc.toLowerCase() + '-' + price;
-                    if (!addedItems.has(itemKey)) {
-                        addLineItem(formattedDesc, price);
-                        addedItems.add(itemKey);
-                        itemsFound++;
-                    }
+                    console.log('Added multi-item:', desc, price);
                 }
             }
         }
@@ -1194,12 +1184,20 @@
 
         // Update status
         document.getElementById('statusText').classList.remove('processing');
-        if (itemsFound > 0) {
-            document.getElementById('statusText').textContent = `Found ${itemsFound} item(s). Review and edit as needed.`;
-            showToast(`Parsed ${itemsFound} line item(s)!`, 'success');
+        
+        const fieldsFound = [];
+        if (document.getElementById('customerName').value) fieldsFound.push('name');
+        if (document.getElementById('customerAddress').value) fieldsFound.push('address');
+        if (document.getElementById('customerContact').value) fieldsFound.push('phone');
+        if (document.getElementById('projectDesc').value) fieldsFound.push('project');
+        if (itemsFound > 0) fieldsFound.push(itemsFound + ' item(s)');
+        
+        if (fieldsFound.length > 0) {
+            document.getElementById('statusText').textContent = `Found: ${fieldsFound.join(', ')}. Review and edit.`;
+            showToast(`Parsed successfully!`, 'success');
         } else {
-            document.getElementById('statusText').textContent = 'Done. Add items manually or try again.';
-            showToast('Processed. Check fields above.', 'success');
+            document.getElementById('statusText').textContent = 'Could not parse. Try speaking more clearly or add manually.';
+            showToast('Could not parse input', 'error');
         }
     }
 
@@ -1471,16 +1469,4 @@
         
         setTimeout(() => {
             toast.classList.remove('show');
-        }, 3000);
-    }
-
-    // Close modal on outside click
-    document.getElementById('savedDocsModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeSavedDocs();
-        }
-    });
-</script>
-
-</body>
-</html>
+        }, 3000)
