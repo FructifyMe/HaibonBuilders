@@ -991,19 +991,9 @@
     // ========== Local Voice Parsing (No API needed!) ==========
     function parseVoiceInput(transcript) {
         const text = transcript.toLowerCase().trim();
-        const originalText = transcript.trim();
         let itemsFound = 0;
         
         console.log('Parsing transcript:', text);
-        
-        // Helper: Convert price strings to numbers
-        function parsePrice(str) {
-            if (!str) return null;
-            // Remove $ and commas, parse as float
-            const cleaned = str.replace(/[$,]/g, '').trim();
-            const num = parseFloat(cleaned);
-            return isNaN(num) ? null : num;
-        }
         
         // Helper: Capitalize words
         function capitalize(str) {
@@ -1012,167 +1002,179 @@
                 .join(' ');
         }
         
-        // ===== 1. Extract Phone Number =====
-        // Patterns: 978-555-1212, 978.555.1212, 9785551212, (978) 555-1212
-        const phonePatterns = [
-            /\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/,
-            /\d{3}[-.\s]\d{2,3}[-.\s]\d{4}/
-        ];
-        for (const pattern of phonePatterns) {
-            const phoneMatch = text.match(pattern);
-            if (phoneMatch) {
-                document.getElementById('customerContact').value = phoneMatch[0];
-                console.log('Found phone:', phoneMatch[0]);
-                break;
+        // Helper: Convert number words to digits
+        const numberWords = {
+            'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+            'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
+            'eleven': 11, 'twelve': 12, 'fifteen': 15, 'twenty': 20
+        };
+        
+        function wordToNum(word) {
+            return numberWords[word.toLowerCase()] || null;
+        }
+
+        // ===== 1. Find ALL dollar amounts with context =====
+        // Priority: actual $ signs, then "for $X", then "X dollars"
+        const priceItems = [];
+        
+        // Pattern: "[description] for $X" or "[description] $X"
+        const dollarPattern = /([a-z][a-z\s]{2,}?)\s+(?:for\s+)?\$\s*([\d,]+(?:\.\d{2})?)/gi;
+        let match;
+        while ((match = dollarPattern.exec(text)) !== null) {
+            const desc = match[1].trim();
+            const price = parseFloat(match[2].replace(/,/g, ''));
+            if (price >= 50) {
+                priceItems.push({ desc, price, priority: 1 });
+                console.log('Found $ item:', desc, price);
             }
         }
         
-        // ===== 2. Extract Price (dollar amounts) =====
-        // Look for: $12,000 or $12000 or 12,000 dollars or "for $X"
-        const pricePatterns = [
-            /\$[\d,]+(?:\.\d{2})?/g,
-            /(?:for|total|price|cost|quote)\s*\$?(\d[\d,]*(?:\.\d{2})?)/gi,
-            /(\d{1,3}(?:,\d{3})+(?:\.\d{2})?)\s*(?:dollars?|bucks?)?/g,
-            /(\d{4,}(?:\.\d{2})?)\s*(?:dollars?|bucks?)?/g
-        ];
-        
-        let foundPrice = null;
-        let priceDescription = null;
-        
-        // First, look for "X for $Y" pattern (e.g., "kitchen remodel for $12,000")
-        const descPriceMatch = text.match(/([a-z][a-z\s]+?)\s+(?:for|at|price|cost|quote)?\s*\$?([\d,]+(?:\.\d{2})?)\s*(?:dollars?|bucks?)?$/i);
-        if (descPriceMatch) {
-            priceDescription = descPriceMatch[1].trim();
-            foundPrice = parsePrice(descPriceMatch[2]);
-            console.log('Found desc+price pattern:', priceDescription, foundPrice);
-        }
-        
-        // Also check for standalone price
-        if (!foundPrice) {
-            for (const pattern of pricePatterns) {
-                const matches = text.match(pattern);
-                if (matches) {
-                    for (const m of matches) {
-                        const price = parsePrice(m.replace(/.*?(\$?[\d,]+).*/, '$1'));
-                        if (price && price >= 100) { // Assume prices are at least $100
-                            foundPrice = price;
-                            console.log('Found price:', foundPrice);
-                            break;
-                        }
-                    }
-                }
-                if (foundPrice) break;
+        // Pattern: "$X for [description]" 
+        const dollarBeforePattern = /\$([\d,]+(?:\.\d{2})?)\s+(?:for\s+)?([a-z][a-z\s]{2,}?)(?:\s+and|\s*,|$)/gi;
+        while ((match = dollarBeforePattern.exec(text)) !== null) {
+            const price = parseFloat(match[1].replace(/,/g, ''));
+            const desc = match[2].trim();
+            if (price >= 50 && !priceItems.some(p => p.price === price)) {
+                priceItems.push({ desc, price, priority: 1 });
+                console.log('Found $-before item:', desc, price);
             }
         }
         
-        // ===== 3. Extract Address =====
-        // Look for: number + street name (with or without "at")
-        const streetTypes = 'street|st|avenue|ave|road|rd|drive|dr|lane|ln|way|circle|cir|court|ct|boulevard|blvd|place|pl|terrace|ter|highway|hwy';
-        const addressPattern = new RegExp(`(\\d+\\s+[a-z]+(?:\\s+[a-z]+)?\\s+(?:${streetTypes}))`, 'i');
-        const addressMatch = text.match(addressPattern);
-        if (addressMatch) {
-            document.getElementById('customerAddress').value = capitalize(addressMatch[1]);
-            console.log('Found address:', addressMatch[1]);
+        // Pattern: "X [items] for $Y each" - calculate total
+        const eachPattern = /(\w+)\s+(?:new\s+)?([a-z]+(?:\s+[a-z]+)?)\s+(?:for\s+)?\$([\d,]+(?:\.\d{2})?)\s+each/gi;
+        while ((match = eachPattern.exec(text)) !== null) {
+            let qty = parseInt(match[1]) || wordToNum(match[1]) || 1;
+            const desc = match[2].trim();
+            const unitPrice = parseFloat(match[3].replace(/,/g, ''));
+            const total = qty * unitPrice;
+            if (total >= 50) {
+                // Remove any existing entry for this item
+                const existingIdx = priceItems.findIndex(p => p.desc.includes(desc));
+                if (existingIdx >= 0) priceItems.splice(existingIdx, 1);
+                priceItems.push({ desc: `${capitalize(desc)} (${qty} @ $${unitPrice})`, price: total, priority: 0 });
+                console.log('Found each item:', desc, qty, 'x', unitPrice, '=', total);
+            }
         }
         
-        // ===== 4. Extract Customer Name =====
-        // Look for: "for [Name]" at the beginning, or name patterns before address/phone
+        // Pattern: "[number] [items] at $Y" - calculate total
+        const atPricePattern = /(\w+)\s+(?:new\s+)?([a-z]+(?:\s+[a-z]+)?)\s+at\s+\$([\d,]+(?:\.\d{2})?)/gi;
+        while ((match = atPricePattern.exec(text)) !== null) {
+            let qty = parseInt(match[1]) || wordToNum(match[1]) || 1;
+            const desc = match[2].trim();
+            const unitPrice = parseFloat(match[3].replace(/,/g, ''));
+            const total = qty * unitPrice;
+            if (total >= 50 && !priceItems.some(p => p.price === total)) {
+                priceItems.push({ desc: `${capitalize(desc)} (${qty} @ $${unitPrice})`, price: total, priority: 0 });
+                console.log('Found at-price item:', desc, qty, 'x', unitPrice, '=', total);
+            }
+        }
+
+        // ===== 2. Extract Customer Name =====
+        // Pattern: "for [FirstName] [LastName]" followed by address or other content
         const namePatterns = [
-            /(?:estimate|invoice|quote)?\s*(?:for|customer|client)\s+([a-z]+\s+[a-z]+)/i,
-            /^(?:new\s+)?(?:estimate|invoice|quote)?\s*(?:for)?\s*([a-z]+\s+[a-z]+)\s+\d/i
+            /(?:job|estimate|invoice|quote|customer|client)?\s*(?:for)\s+([a-z]+)\s+([a-z]+)\s+\d/i,
+            /(?:job|estimate|invoice|quote|customer|client)\s+(?:for\s+)?([a-z]+)\s+([a-z]+)/i,
+            /(?:for)\s+([a-z]+)\s+([a-z]+)\s+(?:at\s+)?\d/i
         ];
+        
+        const skipWords = ['the', 'this', 'that', 'new', 'old', 'kitchen', 'bathroom', 'basement', 'deck', 
+                          'roof', 'remodel', 'renovation', 'repair', 'tile', 'window', 'door', 'floor'];
         
         for (const pattern of namePatterns) {
             const nameMatch = text.match(pattern);
             if (nameMatch) {
-                const name = nameMatch[1].trim();
-                // Filter out common words that aren't names
-                const notNames = ['kitchen', 'bathroom', 'basement', 'deck', 'roof', 'new', 'estimate', 'invoice', 'high', 'main', 'oak', 'elm', 'maple'];
-                const words = name.split(' ');
-                if (!notNames.includes(words[0].toLowerCase())) {
-                    document.getElementById('customerName').value = capitalize(name);
-                    console.log('Found name:', name);
+                const firstName = nameMatch[1];
+                const lastName = nameMatch[2];
+                if (!skipWords.includes(firstName.toLowerCase()) && !skipWords.includes(lastName.toLowerCase())) {
+                    document.getElementById('customerName').value = capitalize(firstName) + ' ' + capitalize(lastName);
+                    console.log('Found name:', firstName, lastName);
+                    break;
+                }
+            }
+        }
+
+        // ===== 3. Extract Address =====
+        // Pattern: number + words + street type + optional city/state
+        const streetTypes = '(?:street|st|avenue|ave|road|rd|drive|dr|lane|ln|way|circle|cir|court|ct|boulevard|blvd|place|pl)';
+        const addressPattern = new RegExp(
+            `(\\d+\\s+[a-z]+(?:\\s+[a-z]+)?\\s+${streetTypes})(?:\\s+([a-z]+))?(?:\\s+([a-z]+|ma|mass|massachusetts))?`,
+            'i'
+        );
+        const addressMatch = text.match(addressPattern);
+        if (addressMatch) {
+            let addr = addressMatch[1];
+            if (addressMatch[2]) addr += ' ' + addressMatch[2]; // city
+            if (addressMatch[3]) addr += ' ' + addressMatch[3]; // state
+            document.getElementById('customerAddress').value = capitalize(addr);
+            console.log('Found address:', addr);
+        }
+
+        // ===== 4. Extract Phone Number =====
+        const phonePattern = /\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/;
+        const phoneMatch = text.match(phonePattern);
+        if (phoneMatch) {
+            document.getElementById('customerContact').value = phoneMatch[0];
+            console.log('Found phone:', phoneMatch[0]);
+        }
+
+        // ===== 5. Extract Project Description =====
+        const projectPatterns = [
+            /(?:going to|will|gonna)\s+(?:remodel|renovate|fix|repair|replace|install|build|do)\s+(?:the\s+|this\s+)?([a-z]+)/i,
+            /([a-z]+)\s+(?:remodel|renovation|repair|replacement|installation)/i
+        ];
+        
+        for (const pattern of projectPatterns) {
+            const projMatch = text.match(pattern);
+            if (projMatch) {
+                const room = projMatch[1];
+                if (!['we', 'i', 'you', 'they', 'going', 'will'].includes(room.toLowerCase())) {
+                    document.getElementById('projectDesc').value = capitalize(room) + ' Remodel';
+                    console.log('Found project:', room);
                     break;
                 }
             }
         }
         
-        // ===== 5. Extract Project Description =====
-        // Common project types
-        const projectTypes = [
-            'kitchen remodel', 'kitchen renovation', 'bathroom remodel', 'bathroom renovation',
-            'basement finishing', 'basement remodel', 'deck', 'deck building', 'deck repair',
-            'roof repair', 'roofing', 'siding', 'window replacement', 'windows',
-            'door installation', 'flooring', 'hardwood floors', 'tile work', 'tiling',
-            'painting', 'interior painting', 'exterior painting', 'drywall', 'framing',
-            'addition', 'home addition', 'garage', 'shed', 'fence', 'fencing',
-            'plumbing', 'electrical', 'hvac', 'landscaping', 'concrete', 'masonry',
-            'cabinet installation', 'countertops', 'backsplash', 'trim work', 'molding',
-            'remodel', 'renovation', 'repair', 'installation', 'replacement'
-        ];
-        
-        for (const proj of projectTypes) {
-            if (text.includes(proj)) {
-                document.getElementById('projectDesc').value = capitalize(proj);
-                // Use this as line item description if we found a price
-                if (foundPrice && !priceDescription) {
-                    priceDescription = proj;
-                }
-                console.log('Found project:', proj);
+        // Also check for explicit project words
+        const projectKeywords = ['kitchen', 'bathroom', 'basement', 'deck', 'roof', 'garage', 'addition'];
+        for (const kw of projectKeywords) {
+            if (text.includes(kw) && !document.getElementById('projectDesc').value) {
+                document.getElementById('projectDesc').value = capitalize(kw) + ' Work';
                 break;
             }
         }
-        
-        // ===== 6. Create Line Item if we found a price =====
-        if (foundPrice) {
-            // Clear empty line items first
-            const tbody = document.getElementById('lineItemsBody');
-            const existingRows = tbody.querySelectorAll('.line-item-row');
-            existingRows.forEach(row => {
-                const descInput = row.querySelector('input[type="text"]');
-                const amtInput = row.querySelector('input[type="number"]');
-                if (!descInput.value && !amtInput.value) {
-                    row.remove();
-                }
-            });
-            
-            // Determine description
-            let itemDesc = priceDescription || document.getElementById('projectDesc').value || 'Work';
-            
-            // Clean up description (remove filler words)
-            itemDesc = itemDesc.replace(/\b(for|the|a|an|new|estimate|invoice|quote)\b/gi, '').trim();
-            itemDesc = capitalize(itemDesc);
-            
-            addLineItem(itemDesc, foundPrice);
-            itemsFound++;
-            console.log('Added line item:', itemDesc, foundPrice);
-        }
-        
-        // ===== 7. Look for multiple items (comma or "and" separated) =====
-        // Pattern: "labor 500, materials 300, tile 800"
-        const multiItemPattern = /([a-z]+(?:\s+[a-z]+)?)\s+\$?([\d,]+)/gi;
-        let multiMatch;
-        const addedItems = new Set();
-        
-        // Only look for multi-items if we haven't found a big single price
-        if (!foundPrice || foundPrice < 1000) {
-            while ((multiMatch = multiItemPattern.exec(text)) !== null) {
-                const desc = multiMatch[1].trim();
-                const price = parsePrice(multiMatch[2]);
-                
-                // Skip if it looks like phone, address, or already added
-                if (!price || price < 50) continue;
-                if (/^\d+$/.test(desc)) continue;
-                if (/street|st|ave|road|rd|drive|dr|lane|ln/i.test(desc)) continue;
-                
-                const itemKey = desc.toLowerCase() + '-' + price;
-                if (!addedItems.has(itemKey) && price !== foundPrice) {
-                    addLineItem(capitalize(desc), price);
-                    addedItems.add(itemKey);
-                    itemsFound++;
-                    console.log('Added multi-item:', desc, price);
-                }
+
+        // ===== 6. Add Line Items =====
+        // Clear empty rows first
+        const tbody = document.getElementById('lineItemsBody');
+        const existingRows = tbody.querySelectorAll('.line-item-row');
+        existingRows.forEach(row => {
+            const descInput = row.querySelector('input[type="text"]');
+            const amtInput = row.querySelector('input[type="number"]');
+            if (!descInput.value && !amtInput.value) {
+                row.remove();
             }
+        });
+        
+        // Sort by priority and add items
+        priceItems.sort((a, b) => a.priority - b.priority);
+        const addedPrices = new Set();
+        
+        for (const item of priceItems) {
+            if (addedPrices.has(item.price)) continue;
+            
+            // Clean up description
+            let desc = item.desc
+                .replace(/\b(we|will|going|to|the|this|that|put|down|in|also|and|are|for|new)\b/gi, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+            
+            if (desc.length < 2) desc = document.getElementById('projectDesc').value || 'Work';
+            
+            addLineItem(capitalize(desc), item.price);
+            addedPrices.add(item.price);
+            itemsFound++;
+            console.log('Added line item:', desc, item.price);
         }
 
         // Ensure at least one line item row exists
@@ -1182,7 +1184,7 @@
 
         calculateTotal();
 
-        // Update status
+        // ===== 7. Report results =====
         document.getElementById('statusText').classList.remove('processing');
         
         const fieldsFound = [];
@@ -1196,7 +1198,7 @@
             document.getElementById('statusText').textContent = `Found: ${fieldsFound.join(', ')}. Review and edit.`;
             showToast(`Parsed successfully!`, 'success');
         } else {
-            document.getElementById('statusText').textContent = 'Could not parse. Try speaking more clearly or add manually.';
+            document.getElementById('statusText').textContent = 'Could not parse. Try again or add manually.';
             showToast('Could not parse input', 'error');
         }
     }
