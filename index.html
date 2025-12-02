@@ -22,688 +22,108 @@
             --red: #dc2626;
             --green: #16a34a;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--cream);
-            color: var(--gray-800);
-            min-height: 100vh;
-        }
-
-        /* Header */
-        .header {
-            background: var(--navy);
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo-section img {
-            height: 50px;
-            width: auto;
-        }
-
-        .logo-text {
-            color: var(--white);
-        }
-
-        .logo-text h1 {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1.25rem;
-            font-weight: 400;
-        }
-
-        .logo-text span {
-            font-size: 0.75rem;
-            color: var(--gold);
-            letter-spacing: 0.05em;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .header-btn {
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .header-btn:hover {
-            background: var(--gold);
-            color: var(--navy);
-        }
-
-        /* Main Layout */
-        .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
-
-        /* Document Type Toggle */
-        .doc-type-toggle {
-            display: flex;
-            background: var(--white);
-            border-radius: 8px;
-            padding: 4px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .doc-type-btn {
-            flex: 1;
-            padding: 0.75rem 1rem;
-            border: none;
-            background: transparent;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--gray-600);
-            cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-
-        .doc-type-btn.active {
-            background: var(--navy);
-            color: var(--white);
-        }
-
-        /* Voice Section */
-        .voice-section {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .voice-section h2 {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            color: var(--navy);
-        }
-
-        .voice-hint {
-            font-size: 0.875rem;
-            color: var(--gray-600);
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        .voice-hint code {
-            background: var(--gray-100);
-            padding: 0.125rem 0.375rem;
-            border-radius: 4px;
-            font-size: 0.8125rem;
-        }
-
-        .voice-controls {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .mic-btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: 3px solid var(--navy);
-            background: var(--white);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-
-        .mic-btn:hover {
-            background: var(--gray-100);
-        }
-
-        .mic-btn.recording {
-            background: var(--red);
-            border-color: var(--red);
-            animation: pulse 1.5s infinite;
-        }
-
-        .mic-btn.recording svg {
-            fill: var(--white);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .mic-btn svg {
-            width: 32px;
-            height: 32px;
-            fill: var(--navy);
-        }
-
-        .voice-status {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .status-text {
-            font-weight: 600;
-            color: var(--navy);
-            margin-bottom: 0.25rem;
-        }
-
-        .status-text.recording {
-            color: var(--red);
-        }
-
-        .status-text.processing {
-            color: var(--gold);
-        }
-
-        .transcript-preview {
-            font-size: 0.875rem;
-            color: var(--gray-600);
-            font-style: italic;
-            max-height: 60px;
-            overflow-y: auto;
-        }
-
-        /* Document Card */
-        .document-card {
-            background: var(--white);
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-
-        .doc-header {
-            background: var(--navy);
-            color: var(--white);
-            padding: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .doc-header-left h3 {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1.5rem;
-            font-weight: 400;
-        }
-
-        .doc-number {
-            font-size: 0.875rem;
-            color: var(--gold);
-            margin-top: 0.25rem;
-        }
-
-        .doc-header-right {
-            text-align: right;
-        }
-
-        .doc-header-right img {
-            height: 40px;
-            margin-bottom: 0.5rem;
-        }
-
-        .company-info {
-            font-size: 0.75rem;
-            line-height: 1.4;
-            opacity: 0.9;
-        }
-
-        .doc-body {
-            padding: 1.5rem;
-        }
-
-        /* Customer Info */
-        .customer-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .form-group label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--gray-600);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .form-group input, .form-group textarea {
-            padding: 0.625rem;
-            border: 1px solid var(--gray-200);
-            border-radius: 6px;
-            font-size: 0.9375rem;
-            font-family: inherit;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--navy);
-        }
-
-        /* Line Items */
-        .line-items-section h4 {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--gray-600);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.75rem;
-        }
-
-        .line-items-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .line-items-table th {
-            text-align: left;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--gray-600);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 0.5rem;
-            border-bottom: 2px solid var(--gray-200);
-        }
-
-        .line-items-table th:last-child {
-            text-align: right;
-            width: 120px;
-        }
-
-        .line-items-table th:nth-child(3) {
-            width: 50px;
-        }
-
-        .line-item-row td {
-            padding: 0.5rem;
-            border-bottom: 1px solid var(--gray-100);
-            vertical-align: top;
-        }
-
-        .line-item-row input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--gray-200);
-            border-radius: 4px;
-            font-size: 0.9375rem;
-            font-family: inherit;
-        }
-
-        .line-item-row input:focus {
-            outline: none;
-            border-color: var(--navy);
-        }
-
-        .line-item-row input[type="number"] {
-            text-align: right;
-        }
-
-        .delete-item-btn {
-            background: none;
-            border: none;
-            color: var(--gray-400);
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .delete-item-btn:hover {
-            background: var(--red);
-            color: var(--white);
-        }
-
-        .add-item-btn {
-            margin-top: 0.75rem;
-            padding: 0.625rem 1rem;
-            background: var(--gray-100);
-            border: 1px dashed var(--gray-400);
-            border-radius: 6px;
-            color: var(--gray-600);
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.2s;
-        }
-
-        .add-item-btn:hover {
-            background: var(--gray-200);
-            border-color: var(--gray-600);
-        }
-
-        /* Totals */
-        .totals-section {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid var(--navy);
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .totals-box {
-            width: 250px;
-        }
-
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            font-size: 0.9375rem;
-        }
-
-        .total-row.grand-total {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--navy);
-            border-top: 2px solid var(--gray-200);
-            margin-top: 0.5rem;
-            padding-top: 0.75rem;
-        }
-
-        /* Notes */
-        .notes-section {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--gray-200);
-        }
-
-        .notes-section textarea {
-            width: 100%;
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            font-size: 0.9375rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .action-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .btn-primary {
-            background: var(--navy);
-            color: var(--white);
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background: #243352;
-        }
-
-        .btn-secondary {
-            background: var(--white);
-            color: var(--navy);
-            border: 2px solid var(--navy);
-        }
-
-        .btn-secondary:hover {
-            background: var(--gray-100);
-        }
-
-        .btn-gold {
-            background: var(--gold);
-            color: var(--navy);
-            border: none;
-        }
-
-        .btn-gold:hover {
-            background: var(--gold-light);
-        }
-
-        /* Saved Documents Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: var(--white);
-            border-radius: 12px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid var(--gray-200);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h3 {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1.25rem;
-            color: var(--navy);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--gray-600);
-            padding: 0.25rem;
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .saved-doc-item {
-            padding: 1rem;
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            margin-bottom: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .saved-doc-item:hover {
-            border-color: var(--navy);
-            background: var(--gray-100);
-        }
-
-        .saved-doc-item h4 {
-            font-size: 1rem;
-            color: var(--navy);
-            margin-bottom: 0.25rem;
-        }
-
-        .saved-doc-meta {
-            font-size: 0.8125rem;
-            color: var(--gray-600);
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .saved-doc-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-        }
-
-        .saved-doc-actions button {
-            padding: 0.375rem 0.75rem;
-            font-size: 0.8125rem;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .no-docs-message {
-            text-align: center;
-            padding: 2rem;
-            color: var(--gray-600);
-        }
-
-        /* Print Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--gray-800); min-height: 100vh; }
+        .header { background: var(--navy); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        .logo-section { display: flex; align-items: center; gap: 1rem; }
+        .logo-section img { height: 50px; width: auto; }
+        .logo-text { color: var(--white); }
+        .logo-text h1 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; font-weight: 400; }
+        .logo-text span { font-size: 0.75rem; color: var(--gold); letter-spacing: 0.05em; }
+        .header-actions { display: flex; gap: 0.5rem; }
+        .header-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.875rem; font-weight: 500; transition: all 0.2s; }
+        .header-btn:hover { background: var(--gold); color: var(--navy); }
+        .main-container { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+        .doc-type-toggle { display: flex; background: var(--white); border-radius: 8px; padding: 4px; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .doc-type-btn { flex: 1; padding: 0.75rem 1rem; border: none; background: transparent; font-size: 1rem; font-weight: 600; color: var(--gray-600); cursor: pointer; border-radius: 6px; transition: all 0.2s; }
+        .doc-type-btn.active { background: var(--navy); color: var(--white); }
+        .voice-section { background: var(--white); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .voice-section h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--navy); }
+        .voice-hint { font-size: 0.875rem; color: var(--gray-600); margin-bottom: 1rem; line-height: 1.5; }
+        .voice-controls { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        .mic-btn { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--navy); background: var(--white); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+        .mic-btn:hover { background: var(--gray-100); }
+        .mic-btn.recording { background: var(--red); border-color: var(--red); animation: pulse 1.5s infinite; }
+        .mic-btn.recording svg { fill: var(--white); }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .mic-btn svg { width: 32px; height: 32px; fill: var(--navy); }
+        .voice-status { flex: 1; min-width: 200px; }
+        .status-text { font-weight: 600; color: var(--navy); margin-bottom: 0.25rem; }
+        .status-text.recording { color: var(--red); }
+        .status-text.processing { color: var(--gold); }
+        .transcript-preview { font-size: 0.875rem; color: var(--gray-600); font-style: italic; max-height: 60px; overflow-y: auto; }
+        .document-card { background: var(--white); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
+        .doc-header { background: var(--navy); color: var(--white); padding: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+        .doc-header-left h3 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-weight: 400; }
+        .doc-number { font-size: 0.875rem; color: var(--gold); margin-top: 0.25rem; }
+        .doc-header-right { text-align: right; }
+        .doc-header-right img { height: 40px; margin-bottom: 0.5rem; }
+        .company-info { font-size: 0.75rem; line-height: 1.4; opacity: 0.9; }
+        .doc-body { padding: 1.5rem; }
+        .customer-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--gray-200); }
+        .form-group { display: flex; flex-direction: column; gap: 0.25rem; }
+        .form-group label { font-size: 0.75rem; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.05em; }
+        .form-group input, .form-group textarea { padding: 0.625rem; border: 1px solid var(--gray-200); border-radius: 6px; font-size: 0.9375rem; font-family: inherit; transition: border-color 0.2s; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--navy); }
+        .line-items-section h4 { font-size: 0.875rem; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+        .line-items-table { width: 100%; border-collapse: collapse; }
+        .line-items-table th { text-align: left; font-size: 0.75rem; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.05em; padding: 0.5rem; border-bottom: 2px solid var(--gray-200); }
+        .line-items-table th:last-child { text-align: right; width: 120px; }
+        .line-items-table th:nth-child(3) { width: 50px; }
+        .line-item-row td { padding: 0.5rem; border-bottom: 1px solid var(--gray-100); vertical-align: top; }
+        .line-item-row input { width: 100%; padding: 0.5rem; border: 1px solid var(--gray-200); border-radius: 4px; font-size: 0.9375rem; font-family: inherit; }
+        .line-item-row input:focus { outline: none; border-color: var(--navy); }
+        .line-item-row input[type="number"] { text-align: right; }
+        .delete-item-btn { background: none; border: none; color: var(--gray-400); cursor: pointer; padding: 0.5rem; border-radius: 4px; transition: all 0.2s; }
+        .delete-item-btn:hover { background: var(--red); color: var(--white); }
+        .add-item-btn { margin-top: 0.75rem; padding: 0.625rem 1rem; background: var(--gray-100); border: 1px dashed var(--gray-400); border-radius: 6px; color: var(--gray-600); font-size: 0.875rem; font-weight: 500; cursor: pointer; width: 100%; transition: all 0.2s; }
+        .add-item-btn:hover { background: var(--gray-200); border-color: var(--gray-600); }
+        .totals-section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--navy); display: flex; justify-content: flex-end; }
+        .totals-box { width: 250px; }
+        .total-row { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9375rem; }
+        .total-row.grand-total { font-size: 1.25rem; font-weight: 700; color: var(--navy); border-top: 2px solid var(--gray-200); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .notes-section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200); }
+        .notes-section textarea { width: 100%; min-height: 80px; resize: vertical; }
+        .action-buttons { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .action-btn { padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 0.9375rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem; }
+        .action-btn svg { width: 18px; height: 18px; }
+        .btn-primary { background: var(--navy); color: var(--white); border: none; }
+        .btn-primary:hover { background: #243352; }
+        .btn-secondary { background: var(--white); color: var(--navy); border: 2px solid var(--navy); }
+        .btn-secondary:hover { background: var(--gray-100); }
+        .btn-gold { background: var(--gold); color: var(--navy); border: none; }
+        .btn-gold:hover { background: var(--gold-light); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--white); border-radius: 12px; max-width: 600px; width: 100%; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; }
+        .modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--navy); }
+        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-600); padding: 0.25rem; }
+        .modal-body { padding: 1.5rem; overflow-y: auto; flex: 1; }
+        .saved-doc-item { padding: 1rem; border: 1px solid var(--gray-200); border-radius: 8px; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s; }
+        .saved-doc-item:hover { border-color: var(--navy); background: var(--gray-100); }
+        .saved-doc-item h4 { font-size: 1rem; color: var(--navy); margin-bottom: 0.25rem; }
+        .saved-doc-meta { font-size: 0.8125rem; color: var(--gray-600); display: flex; gap: 1rem; flex-wrap: wrap; }
+        .saved-doc-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+        .no-docs-message { text-align: center; padding: 2rem; color: var(--gray-600); }
+        .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: var(--navy); color: var(--white); padding: 0.875rem 1.5rem; border-radius: 8px; font-weight: 500; z-index: 300; opacity: 0; transition: opacity 0.3s; }
+        .toast.show { opacity: 1; }
+        .toast.error { background: var(--red); }
+        .toast.success { background: var(--green); }
         @media print {
-            body {
-                background: white;
-            }
-            
-            .header, .voice-section, .action-buttons, .modal-overlay,
-            .doc-type-toggle, .delete-item-btn, .add-item-btn {
-                display: none !important;
-            }
-            
-            .main-container {
-                padding: 0;
-                max-width: none;
-            }
-            
-            .document-card {
-                box-shadow: none;
-                border: 1px solid #ddd;
-            }
-            
-            .form-group input, .form-group textarea,
-            .line-item-row input {
-                border: none;
-                padding: 0.25rem 0;
-                background: transparent;
-            }
+            body { background: white; }
+            .header, .voice-section, .action-buttons, .modal-overlay, .doc-type-toggle, .delete-item-btn, .add-item-btn { display: none !important; }
+            .main-container { padding: 0; max-width: none; }
+            .document-card { box-shadow: none; border: 1px solid #ddd; }
+            .form-group input, .form-group textarea, .line-item-row input { border: none; padding: 0.25rem 0; background: transparent; }
         }
-
-        /* Mobile Responsive */
         @media (max-width: 600px) {
-            .header {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .logo-section {
-                flex-direction: column;
-            }
-            
-            .doc-header {
-                flex-direction: column;
-            }
-            
-            .doc-header-right {
-                text-align: left;
-            }
-            
-            .line-items-table th:nth-child(1),
-            .line-items-table td:nth-child(1) {
-                display: none;
-            }
-            
-            .action-btn {
-                flex: 1;
-                justify-content: center;
-            }
-        }
-
-        /* Toast notifications */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--navy);
-            color: var(--white);
-            padding: 0.875rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            z-index: 300;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .toast.show {
-            opacity: 1;
-        }
-
-        .toast.error {
-            background: var(--red);
-        }
-
-        .toast.success {
-            background: var(--green);
+            .header { flex-direction: column; gap: 1rem; text-align: center; }
+            .logo-section { flex-direction: column; }
+            .doc-header { flex-direction: column; }
+            .doc-header-right { text-align: left; }
+            .line-items-table th:nth-child(1), .line-items-table td:nth-child(1) { display: none; }
+            .action-btn { flex: 1; justify-content: center; }
         }
     </style>
 </head>
@@ -724,20 +144,15 @@
 </header>
 
 <main class="main-container">
-    <!-- Document Type Toggle -->
     <div class="doc-type-toggle">
         <button class="doc-type-btn active" data-type="estimate" onclick="setDocType('estimate')">Estimate</button>
         <button class="doc-type-btn" data-type="invoice" onclick="setDocType('invoice')">Invoice</button>
     </div>
 
-    <!-- Voice Input Section -->
     <section class="voice-section">
         <h2>🎤 Voice Input</h2>
         <p class="voice-hint">
-            <strong>Say items with prices:</strong> <code>tile work 1200</code> <code>labor 850</code> <code>plumbing 500</code><br>
-            <strong>Set customer:</strong> <code>customer John Smith</code> or <code>for John Smith</code><br>
-            <strong>Set address:</strong> <code>at 45 Oak Street Danvers</code><br>
-            <strong>Set project:</strong> <code>project bathroom remodel</code>
+            Example: "Estimate for Mike Smith 123 Main Street Danvers, kitchen remodel, tile $2000, windows $600"
         </p>
         <div class="voice-controls">
             <button class="mic-btn" id="micBtn" onclick="toggleRecording()">
@@ -750,7 +165,6 @@
         </div>
     </section>
 
-    <!-- Document Card -->
     <div class="document-card">
         <div class="doc-header">
             <div class="doc-header-left">
@@ -762,13 +176,12 @@
                 <div class="company-info">
                     105 Conant St, Danvers, MA 01923<br>
                     (978) 774-4224<br>
-                    <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="acc4cdc5cec3c2ced9c5c0c8c9dedf9d959b9beccbc1cdc5c082cfc3c1">[email&#160;protected]</a>
+                    haibonbuilders1977@gmail.com
                 </div>
             </div>
         </div>
         
         <div class="doc-body">
-            <!-- Customer Info -->
             <div class="customer-section">
                 <div class="form-group">
                     <label>Customer Name</label>
@@ -788,13 +201,11 @@
                 </div>
             </div>
 
-            <!-- Project Description -->
             <div class="form-group" style="margin-bottom: 1.5rem;">
                 <label>Project Description</label>
                 <input type="text" id="projectDesc" placeholder="Kitchen Remodel, Deck Construction, etc.">
             </div>
 
-            <!-- Line Items -->
             <div class="line-items-section">
                 <h4>Line Items</h4>
                 <table class="line-items-table">
@@ -806,14 +217,11 @@
                             <th>Amount</th>
                         </tr>
                     </thead>
-                    <tbody id="lineItemsBody">
-                        <!-- Line items will be added here -->
-                    </tbody>
+                    <tbody id="lineItemsBody"></tbody>
                 </table>
                 <button class="add-item-btn" onclick="addLineItem()">+ Add Line Item</button>
             </div>
 
-            <!-- Totals -->
             <div class="totals-section">
                 <div class="totals-box">
                     <div class="total-row grand-total">
@@ -823,7 +231,6 @@
                 </div>
             </div>
 
-            <!-- Notes -->
             <div class="notes-section">
                 <div class="form-group">
                     <label>Notes / Terms</label>
@@ -833,7 +240,6 @@
         </div>
     </div>
 
-    <!-- Action Buttons -->
     <div class="action-buttons">
         <button class="action-btn btn-primary" onclick="saveDocument()">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
@@ -850,625 +256,440 @@
     </div>
 </main>
 
-<!-- Saved Documents Modal -->
 <div class="modal-overlay" id="savedDocsModal">
     <div class="modal">
         <div class="modal-header">
             <h3>Saved Documents</h3>
             <button class="modal-close" onclick="closeSavedDocs()">&times;</button>
         </div>
-        <div class="modal-body" id="savedDocsList">
-            <!-- Saved documents will be listed here -->
-        </div>
+        <div class="modal-body" id="savedDocsList"></div>
     </div>
 </div>
 
-<!-- Toast Notification -->
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    // ========== State ==========
-    let currentDoc = {
-        id: null,
-        type: 'estimate',
-        number: 'EST-001',
-        customerName: '',
-        customerAddress: '',
-        customerContact: '',
-        date: new Date().toISOString().split('T')[0],
-        projectDesc: '',
-        lineItems: [],
-        notes: '',
-        createdAt: null
+<script>
+// State
+let currentDoc = {
+    id: null,
+    type: 'estimate',
+    number: 'EST-001',
+    createdAt: null
+};
+let lineItemCounter = 0;
+let recognition = null;
+let isRecording = false;
+let finalTranscript = '';
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('docDate').value = new Date().toISOString().split('T')[0];
+    addLineItem();
+    initSpeechRecognition();
+    generateDocNumber();
+});
+
+// Speech Recognition
+function initSpeechRecognition() {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        document.getElementById('statusText').textContent = 'Voice not supported in this browser';
+        document.getElementById('micBtn').disabled = true;
+        return;
+    }
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = function(event) {
+        var interimTranscript = '';
+        for (var i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+                finalTranscript += event.results[i][0].transcript + ' ';
+            } else {
+                interimTranscript += event.results[i][0].transcript;
+            }
+        }
+        document.getElementById('transcriptPreview').textContent = finalTranscript + interimTranscript;
     };
 
-    let lineItemCounter = 0;
-    let recognition = null;
-    let isRecording = false;
-    let finalTranscript = '';
-
-    // ========== Initialize ==========
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('docDate').value = currentDoc.date;
-        addLineItem(); // Start with one empty line item
-        initSpeechRecognition();
-        generateDocNumber();
-    });
-
-    // ========== Speech Recognition ==========
-    function initSpeechRecognition() {
-        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            document.getElementById('statusText').textContent = 'Voice input not supported in this browser';
-            document.getElementById('micBtn').disabled = true;
-            return;
-        }
-
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
-
-        recognition.onresult = function(event) {
-            let interimTranscript = '';
-            
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-                if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript + ' ';
-                } else {
-                    interimTranscript += event.results[i][0].transcript;
-                }
-            }
-            
-            document.getElementById('transcriptPreview').textContent = 
-                finalTranscript + (interimTranscript ? '...' + interimTranscript : '');
-        };
-
-        recognition.onerror = function(event) {
-            console.error('Speech recognition error:', event.error);
-            if (event.error !== 'no-speech') {
-                stopRecording();
-                showToast('Voice recognition error: ' + event.error, 'error');
-            }
-        };
-
-        recognition.onend = function() {
-            if (isRecording) {
-                // Automatically restart if still recording
-                try {
-                    recognition.start();
-                } catch(e) {
-                    // Ignore if already started
-                }
-            }
-        };
-    }
-
-    function toggleRecording() {
-        if (isRecording) {
+    recognition.onerror = function(event) {
+        console.error('Speech error:', event.error);
+        if (event.error !== 'no-speech') {
             stopRecording();
-        } else {
-            startRecording();
+            showToast('Voice error: ' + event.error, 'error');
         }
+    };
+
+    recognition.onend = function() {
+        if (isRecording) {
+            try { recognition.start(); } catch(e) {}
+        }
+    };
+}
+
+function toggleRecording() {
+    if (isRecording) {
+        stopRecording();
+    } else {
+        startRecording();
     }
+}
 
-    function startRecording() {
-        if (!recognition) return;
-        
-        finalTranscript = '';
-        isRecording = true;
-        
-        try {
-            recognition.start();
-        } catch(e) {
-            // Already started
-        }
-        
-        document.getElementById('micBtn').classList.add('recording');
-        document.getElementById('statusText').textContent = 'Listening... Tap to stop';
-        document.getElementById('statusText').classList.add('recording');
-        document.getElementById('transcriptPreview').textContent = '';
-    }
+function startRecording() {
+    if (!recognition) return;
+    finalTranscript = '';
+    isRecording = true;
+    try { recognition.start(); } catch(e) {}
+    document.getElementById('micBtn').classList.add('recording');
+    document.getElementById('statusText').textContent = 'Listening... Tap to stop';
+    document.getElementById('statusText').classList.add('recording');
+    document.getElementById('transcriptPreview').textContent = '';
+}
 
-    function stopRecording() {
-        isRecording = false;
-        if (recognition) {
-            recognition.stop();
-        }
-        
-        document.getElementById('micBtn').classList.remove('recording');
-        document.getElementById('statusText').classList.remove('recording');
-        
-        if (finalTranscript.trim()) {
-            document.getElementById('statusText').textContent = 'Processing...';
-            document.getElementById('statusText').classList.add('processing');
-            parseVoiceInput(finalTranscript);
-        } else {
-            document.getElementById('statusText').textContent = 'Tap microphone to start';
-        }
-    }
-
-    // ========== Local Voice Parsing (No API needed!) ==========
-    function parseVoiceInput(transcript) {
-        const text = transcript.toLowerCase().trim();
-        let itemsFound = 0;
-        
-        console.log('Parsing transcript:', text);
-        
-        // Helper: Capitalize words
-        function capitalize(str) {
-            return str.split(' ')
-                .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-                .join(' ');
-        }
-        
-        // Helper: Convert number words to digits
-        const numberWords = {
-            'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
-            'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
-            'eleven': 11, 'twelve': 12, 'fifteen': 15, 'twenty': 20
-        };
-        
-        function wordToNum(word) {
-            return numberWords[word.toLowerCase()] || null;
-        }
-
-        // ===== 1. Find ALL dollar amounts with context =====
-        // Priority: actual $ signs, then "for $X", then "X dollars"
-        const priceItems = [];
-        
-        // Pattern: "[description] for $X" or "[description] $X"
-        const dollarPattern = /([a-z][a-z\s]{2,}?)\s+(?:for\s+)?\$\s*([\d,]+(?:\.\d{2})?)/gi;
-        let match;
-        while ((match = dollarPattern.exec(text)) !== null) {
-            const desc = match[1].trim();
-            const price = parseFloat(match[2].replace(/,/g, ''));
-            if (price >= 50) {
-                priceItems.push({ desc, price, priority: 1 });
-                console.log('Found $ item:', desc, price);
-            }
-        }
-        
-        // Pattern: "$X for [description]" 
-        const dollarBeforePattern = /\$([\d,]+(?:\.\d{2})?)\s+(?:for\s+)?([a-z][a-z\s]{2,}?)(?:\s+and|\s*,|$)/gi;
-        while ((match = dollarBeforePattern.exec(text)) !== null) {
-            const price = parseFloat(match[1].replace(/,/g, ''));
-            const desc = match[2].trim();
-            if (price >= 50 && !priceItems.some(p => p.price === price)) {
-                priceItems.push({ desc, price, priority: 1 });
-                console.log('Found $-before item:', desc, price);
-            }
-        }
-        
-        // Pattern: "X [items] for $Y each" - calculate total
-        const eachPattern = /(\w+)\s+(?:new\s+)?([a-z]+(?:\s+[a-z]+)?)\s+(?:for\s+)?\$([\d,]+(?:\.\d{2})?)\s+each/gi;
-        while ((match = eachPattern.exec(text)) !== null) {
-            let qty = parseInt(match[1]) || wordToNum(match[1]) || 1;
-            const desc = match[2].trim();
-            const unitPrice = parseFloat(match[3].replace(/,/g, ''));
-            const total = qty * unitPrice;
-            if (total >= 50) {
-                // Remove any existing entry for this item
-                const existingIdx = priceItems.findIndex(p => p.desc.includes(desc));
-                if (existingIdx >= 0) priceItems.splice(existingIdx, 1);
-                priceItems.push({ desc: `${capitalize(desc)} (${qty} @ $${unitPrice})`, price: total, priority: 0 });
-                console.log('Found each item:', desc, qty, 'x', unitPrice, '=', total);
-            }
-        }
-        
-        // Pattern: "[number] [items] at $Y" - calculate total
-        const atPricePattern = /(\w+)\s+(?:new\s+)?([a-z]+(?:\s+[a-z]+)?)\s+at\s+\$([\d,]+(?:\.\d{2})?)/gi;
-        while ((match = atPricePattern.exec(text)) !== null) {
-            let qty = parseInt(match[1]) || wordToNum(match[1]) || 1;
-            const desc = match[2].trim();
-            const unitPrice = parseFloat(match[3].replace(/,/g, ''));
-            const total = qty * unitPrice;
-            if (total >= 50 && !priceItems.some(p => p.price === total)) {
-                priceItems.push({ desc: `${capitalize(desc)} (${qty} @ $${unitPrice})`, price: total, priority: 0 });
-                console.log('Found at-price item:', desc, qty, 'x', unitPrice, '=', total);
-            }
-        }
-
-        // ===== 2. Extract Customer Name =====
-        // Pattern: "for [FirstName] [LastName]" followed by address or other content
-        const namePatterns = [
-            /(?:job|estimate|invoice|quote|customer|client)?\s*(?:for)\s+([a-z]+)\s+([a-z]+)\s+\d/i,
-            /(?:job|estimate|invoice|quote|customer|client)\s+(?:for\s+)?([a-z]+)\s+([a-z]+)/i,
-            /(?:for)\s+([a-z]+)\s+([a-z]+)\s+(?:at\s+)?\d/i
-        ];
-        
-        const skipWords = ['the', 'this', 'that', 'new', 'old', 'kitchen', 'bathroom', 'basement', 'deck', 
-                          'roof', 'remodel', 'renovation', 'repair', 'tile', 'window', 'door', 'floor'];
-        
-        for (const pattern of namePatterns) {
-            const nameMatch = text.match(pattern);
-            if (nameMatch) {
-                const firstName = nameMatch[1];
-                const lastName = nameMatch[2];
-                if (!skipWords.includes(firstName.toLowerCase()) && !skipWords.includes(lastName.toLowerCase())) {
-                    document.getElementById('customerName').value = capitalize(firstName) + ' ' + capitalize(lastName);
-                    console.log('Found name:', firstName, lastName);
-                    break;
-                }
-            }
-        }
-
-        // ===== 3. Extract Address =====
-        // Pattern: number + words + street type + optional city/state
-        const streetTypes = '(?:street|st|avenue|ave|road|rd|drive|dr|lane|ln|way|circle|cir|court|ct|boulevard|blvd|place|pl)';
-        const addressPattern = new RegExp(
-            `(\\d+\\s+[a-z]+(?:\\s+[a-z]+)?\\s+${streetTypes})(?:\\s+([a-z]+))?(?:\\s+([a-z]+|ma|mass|massachusetts))?`,
-            'i'
-        );
-        const addressMatch = text.match(addressPattern);
-        if (addressMatch) {
-            let addr = addressMatch[1];
-            if (addressMatch[2]) addr += ' ' + addressMatch[2]; // city
-            if (addressMatch[3]) addr += ' ' + addressMatch[3]; // state
-            document.getElementById('customerAddress').value = capitalize(addr);
-            console.log('Found address:', addr);
-        }
-
-        // ===== 4. Extract Phone Number =====
-        const phonePattern = /\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/;
-        const phoneMatch = text.match(phonePattern);
-        if (phoneMatch) {
-            document.getElementById('customerContact').value = phoneMatch[0];
-            console.log('Found phone:', phoneMatch[0]);
-        }
-
-        // ===== 5. Extract Project Description =====
-        const projectPatterns = [
-            /(?:going to|will|gonna)\s+(?:remodel|renovate|fix|repair|replace|install|build|do)\s+(?:the\s+|this\s+)?([a-z]+)/i,
-            /([a-z]+)\s+(?:remodel|renovation|repair|replacement|installation)/i
-        ];
-        
-        for (const pattern of projectPatterns) {
-            const projMatch = text.match(pattern);
-            if (projMatch) {
-                const room = projMatch[1];
-                if (!['we', 'i', 'you', 'they', 'going', 'will'].includes(room.toLowerCase())) {
-                    document.getElementById('projectDesc').value = capitalize(room) + ' Remodel';
-                    console.log('Found project:', room);
-                    break;
-                }
-            }
-        }
-        
-        // Also check for explicit project words
-        const projectKeywords = ['kitchen', 'bathroom', 'basement', 'deck', 'roof', 'garage', 'addition'];
-        for (const kw of projectKeywords) {
-            if (text.includes(kw) && !document.getElementById('projectDesc').value) {
-                document.getElementById('projectDesc').value = capitalize(kw) + ' Work';
-                break;
-            }
-        }
-
-        // ===== 6. Add Line Items =====
-        // Clear empty rows first
-        const tbody = document.getElementById('lineItemsBody');
-        const existingRows = tbody.querySelectorAll('.line-item-row');
-        existingRows.forEach(row => {
-            const descInput = row.querySelector('input[type="text"]');
-            const amtInput = row.querySelector('input[type="number"]');
-            if (!descInput.value && !amtInput.value) {
-                row.remove();
-            }
-        });
-        
-        // Sort by priority and add items
-        priceItems.sort((a, b) => a.priority - b.priority);
-        const addedPrices = new Set();
-        
-        for (const item of priceItems) {
-            if (addedPrices.has(item.price)) continue;
-            
-            // Clean up description
-            let desc = item.desc
-                .replace(/\b(we|will|going|to|the|this|that|put|down|in|also|and|are|for|new)\b/gi, '')
-                .replace(/\s+/g, ' ')
-                .trim();
-            
-            if (desc.length < 2) desc = document.getElementById('projectDesc').value || 'Work';
-            
-            addLineItem(capitalize(desc), item.price);
-            addedPrices.add(item.price);
-            itemsFound++;
-            console.log('Added line item:', desc, item.price);
-        }
-
-        // Ensure at least one line item row exists
-        if (document.querySelectorAll('.line-item-row').length === 0) {
-            addLineItem();
-        }
-
-        calculateTotal();
-
-        // ===== 7. Report results =====
-        document.getElementById('statusText').classList.remove('processing');
-        
-        const fieldsFound = [];
-        if (document.getElementById('customerName').value) fieldsFound.push('name');
-        if (document.getElementById('customerAddress').value) fieldsFound.push('address');
-        if (document.getElementById('customerContact').value) fieldsFound.push('phone');
-        if (document.getElementById('projectDesc').value) fieldsFound.push('project');
-        if (itemsFound > 0) fieldsFound.push(itemsFound + ' item(s)');
-        
-        if (fieldsFound.length > 0) {
-            document.getElementById('statusText').textContent = `Found: ${fieldsFound.join(', ')}. Review and edit.`;
-            showToast(`Parsed successfully!`, 'success');
-        } else {
-            document.getElementById('statusText').textContent = 'Could not parse. Try again or add manually.';
-            showToast('Could not parse input', 'error');
-        }
-    }
-
-    // ========== Line Items ==========
-    function addLineItem(description = '', amount = '') {
-        lineItemCounter++;
-        const tbody = document.getElementById('lineItemsBody');
-        
-        const row = document.createElement('tr');
-        row.className = 'line-item-row';
-        row.dataset.id = lineItemCounter;
-        
-        row.innerHTML = `
-            <td>${lineItemCounter}</td>
-            <td><input type="text" placeholder="Description" value="${description}" onchange="calculateTotal()"></td>
-            <td>
-                <button class="delete-item-btn" onclick="deleteLineItem(${lineItemCounter})" title="Delete">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                </button>
-            </td>
-            <td><input type="number" placeholder="0.00" step="0.01" value="${amount}" onchange="calculateTotal()"></td>
-        `;
-        
-        tbody.appendChild(row);
-        calculateTotal();
-    }
-
-    function deleteLineItem(id) {
-        const row = document.querySelector(`.line-item-row[data-id="${id}"]`);
-        if (row) {
-            row.remove();
-            calculateTotal();
-        }
-    }
-
-    function calculateTotal() {
-        const rows = document.querySelectorAll('.line-item-row');
-        let total = 0;
-        
-        rows.forEach(row => {
-            const amountInput = row.querySelector('input[type="number"]');
-            if (amountInput && amountInput.value) {
-                total += parseFloat(amountInput.value) || 0;
-            }
-        });
-        
-        document.getElementById('grandTotal').textContent = '$' + total.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-    }
-
-    // ========== Document Type ==========
-    function setDocType(type) {
-        currentDoc.type = type;
-        
-        // Update toggle buttons
-        document.querySelectorAll('.doc-type-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.type === type);
-        });
-        
-        // Update document display
-        const isInvoice = type === 'invoice';
-        document.getElementById('docTitle').textContent = isInvoice ? 'Invoice' : 'Estimate';
-        document.getElementById('convertBtn').innerHTML = isInvoice 
-            ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/></svg> Convert to Estimate'
-            : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/></svg> Convert to Invoice';
-        
-        // Update document number prefix
-        generateDocNumber();
-    }
-
-    function generateDocNumber() {
-        const prefix = currentDoc.type === 'invoice' ? 'INV' : 'EST';
-        const saved = JSON.parse(localStorage.getItem('haibonDocs') || '[]');
-        const typeCount = saved.filter(d => d.type === currentDoc.type).length + 1;
-        currentDoc.number = `${prefix}-${String(typeCount).padStart(3, '0')}`;
-        document.getElementById('docNumber').textContent = '#' + currentDoc.number;
-    }
-
-    function convertDocument() {
-        const newType = currentDoc.type === 'estimate' ? 'invoice' : 'estimate';
-        setDocType(newType);
-        showToast(`Converted to ${newType}!`, 'success');
-    }
-
-    // ========== Save / Load ==========
-    function gatherDocumentData() {
-        const rows = document.querySelectorAll('.line-item-row');
-        const lineItems = [];
-        
-        rows.forEach(row => {
-            const descInput = row.querySelector('input[type="text"]');
-            const amtInput = row.querySelector('input[type="number"]');
-            if (descInput.value || amtInput.value) {
-                lineItems.push({
-                    description: descInput.value,
-                    amount: parseFloat(amtInput.value) || 0
-                });
-            }
-        });
-        
-        return {
-            id: currentDoc.id || Date.now(),
-            type: currentDoc.type,
-            number: currentDoc.number,
-            customerName: document.getElementById('customerName').value,
-            customerAddress: document.getElementById('customerAddress').value,
-            customerContact: document.getElementById('customerContact').value,
-            date: document.getElementById('docDate').value,
-            projectDesc: document.getElementById('projectDesc').value,
-            lineItems: lineItems,
-            notes: document.getElementById('docNotes').value,
-            total: document.getElementById('grandTotal').textContent,
-            createdAt: currentDoc.createdAt || new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-        };
-    }
-
-    function saveDocument() {
-        const docData = gatherDocumentData();
-        let saved = JSON.parse(localStorage.getItem('haibonDocs') || '[]');
-        
-        // Update or add
-        const existingIndex = saved.findIndex(d => d.id === docData.id);
-        if (existingIndex >= 0) {
-            saved[existingIndex] = docData;
-        } else {
-            saved.push(docData);
-        }
-        
-        localStorage.setItem('haibonDocs', JSON.stringify(saved));
-        currentDoc.id = docData.id;
-        currentDoc.createdAt = docData.createdAt;
-        
-        showToast('Document saved!', 'success');
-    }
-
-    function loadDocument(id) {
-        const saved = JSON.parse(localStorage.getItem('haibonDocs') || '[]');
-        const doc = saved.find(d => d.id === id);
-        
-        if (!doc) return;
-        
-        currentDoc = { ...doc };
-        
-        // Set document type
-        setDocType(doc.type);
-        document.getElementById('docNumber').textContent = '#' + doc.number;
-        
-        // Fill form fields
-        document.getElementById('customerName').value = doc.customerName || '';
-        document.getElementById('customerAddress').value = doc.customerAddress || '';
-        document.getElementById('customerContact').value = doc.customerContact || '';
-        document.getElementById('docDate').value = doc.date || '';
-        document.getElementById('projectDesc').value = doc.projectDesc || '';
-        document.getElementById('docNotes').value = doc.notes || '';
-        
-        // Clear and add line items
-        document.getElementById('lineItemsBody').innerHTML = '';
-        lineItemCounter = 0;
-        
-        if (doc.lineItems && doc.lineItems.length > 0) {
-            doc.lineItems.forEach(item => {
-                addLineItem(item.description, item.amount);
-            });
-        } else {
-            addLineItem();
-        }
-        
-        calculateTotal();
-        closeSavedDocs();
-        showToast('Document loaded!', 'success');
-    }
-
-    function deleteDocument(id, event) {
-        event.stopPropagation();
-        
-        if (!confirm('Delete this document?')) return;
-        
-        let saved = JSON.parse(localStorage.getItem('haibonDocs') || '[]');
-        saved = saved.filter(d => d.id !== id);
-        localStorage.setItem('haibonDocs', JSON.stringify(saved));
-        
-        renderSavedDocs();
-        showToast('Document deleted', 'success');
-    }
-
-    // ========== Modal ==========
-    function openSavedDocs() {
-        renderSavedDocs();
-        document.getElementById('savedDocsModal').classList.add('active');
-    }
-
-    function closeSavedDocs() {
-        document.getElementById('savedDocsModal').classList.remove('active');
-    }
-
-    function renderSavedDocs() {
-        const container = document.getElementById('savedDocsList');
-        const saved = JSON.parse(localStorage.getItem('haibonDocs') || '[]');
-        
-        if (saved.length === 0) {
-            container.innerHTML = '<div class="no-docs-message">No saved documents yet.<br>Create and save your first estimate or invoice!</div>';
-            return;
-        }
-        
-        // Sort by most recent
-        saved.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-        
-        container.innerHTML = saved.map(doc => `
-            <div class="saved-doc-item" onclick="loadDocument(${doc.id})">
-                <h4>${doc.type === 'invoice' ? '📄' : '📝'} ${doc.number} - ${doc.customerName || 'No Customer'}</h4>
-                <div class="saved-doc-meta">
-                    <span>${doc.type.charAt(0).toUpperCase() + doc.type.slice(1)}</span>
-                    <span>${doc.total}</span>
-                    <span>${new Date(doc.date).toLocaleDateString()}</span>
-                </div>
-                <div class="saved-doc-actions">
-                    <button class="action-btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="deleteDocument(${doc.id}, event)">Delete</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // ========== New Document ==========
-    function newDocument() {
-        if (!confirm('Start a new document? Unsaved changes will be lost.')) return;
-        
-        currentDoc = {
-            id: null,
-            type: 'estimate',
-            number: '',
-            customerName: '',
-            customerAddress: '',
-            customerContact: '',
-            date: new Date().toISOString().split('T')[0],
-            projectDesc: '',
-            lineItems: [],
-            notes: '',
-            createdAt: null
-        };
-        
-        document.getElementById('customerName').value = '';
-        document.getElementById('customerAddress').value = '';
-        document.getElementById('customerContact').value = '';
-        document.getElementById('docDate').value = currentDoc.date;
-        document.getElementById('projectDesc').value = '';
-        document.getElementById('docNotes').value = '';
-        
-        document.getElementById('lineItemsBody').innerHTML = '';
-        lineItemCounter = 0;
-        
-        setDocType('estimate');
-        generateDocNumber();
-        addLineItem();
-        
+function stopRecording() {
+    isRecording = false;
+    if (recognition) recognition.stop();
+    document.getElementById('micBtn').classList.remove('recording');
+    document.getElementById('statusText').classList.remove('recording');
+    
+    if (finalTranscript.trim()) {
+        document.getElementById('statusText').textContent = 'Processing...';
+        document.getElementById('statusText').classList.add('processing');
+        setTimeout(function() { parseVoiceInput(finalTranscript); }, 100);
+    } else {
         document.getElementById('statusText').textContent = 'Tap microphone to start';
-        document.getElementById('transcriptPreview').textContent = '';
-        
-        showToast('New document started', 'success');
     }
+}
 
-    // ========== Toast ==========
-    function showToast(message, type = '') {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.className = 'toast show ' + type;
+// Voice Parser
+function parseVoiceInput(transcript) {
+    var text = transcript.toLowerCase().trim();
+    var itemsFound = 0;
+    console.log('Parsing:', text);
+    
+    function capitalize(str) {
+        return str.split(' ').map(function(w) {
+            return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+        }).join(' ');
+    }
+    
+    // Number words
+    var numWords = {one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,fifteen:15,twenty:20};
+    
+    // 1. Find all dollar amounts: look for $ followed by numbers
+    var priceItems = [];
+    var dollarRegex = /(\$\s*[\d,]+(?:\.\d{2})?)/g;
+    var allDollars = text.match(dollarRegex) || [];
+    
+    // For each dollar amount, find what comes before it
+    allDollars.forEach(function(dollarMatch) {
+        var price = parseFloat(dollarMatch.replace(/[$,\s]/g, ''));
+        if (price < 50) return;
         
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000)
+        var idx = text.indexOf(dollarMatch);
+        var before = text.substring(Math.max(0, idx - 50), idx).trim();
+        
+        // Get the last few words before the price
+        var words = before.split(/\s+/);
+        var desc = words.slice(-4).join(' ');
+        
+        // Clean up description
+        desc = desc.replace(/\b(for|the|and|also|will|we|put|in|down|new)\b/gi, '').trim();
+        
+        if (desc.length > 1 && price >= 50) {
+            priceItems.push({desc: desc, price: price});
+        }
+    });
+    
+    // 2. Handle "X items for $Y each" or "X items at $Y each"
+    var eachRegex = /(\w+)\s+(?:new\s+)?(\w+(?:\s+\w+)?)\s+(?:for|at)\s+\$\s*([\d,]+)\s+each/gi;
+    var eachMatch;
+    while ((eachMatch = eachRegex.exec(text)) !== null) {
+        var qty = parseInt(eachMatch[1]) || numWords[eachMatch[1].toLowerCase()] || 1;
+        var itemDesc = eachMatch[2];
+        var unitPrice = parseFloat(eachMatch[3].replace(/,/g, ''));
+        var total = qty * unitPrice;
+        if (total >= 50) {
+            // Remove any matching single price
+            priceItems = priceItems.filter(function(p) { return p.price !== unitPrice; });
+            priceItems.push({desc: itemDesc + ' (' + qty + ' @ $' + unitPrice + ')', price: total});
+        }
+    }
+    
+    // 3. Customer name: "for [FirstName] [LastName]" followed by number
+    var nameRegex = /(?:for|customer)\s+([a-z]+)\s+([a-z]+)\s+\d/i;
+    var nameMatch = text.match(nameRegex);
+    if (nameMatch) {
+        var skip = ['the','this','new','kitchen','bathroom','remodel'];
+        if (skip.indexOf(nameMatch[1].toLowerCase()) === -1) {
+            document.getElementById('customerName').value = capitalize(nameMatch[1] + ' ' + nameMatch[2]);
+        }
+    }
+    
+    // 4. Address: number + words + street type
+    var addrRegex = /(\d+\s+[a-z]+(?:\s+[a-z]+)?\s+(?:street|st|avenue|ave|road|rd|drive|dr|lane|ln|way|court|ct|place|pl))(?:\s+([a-z]+))?/i;
+    var addrMatch = text.match(addrRegex);
+    if (addrMatch) {
+        var addr = addrMatch[1];
+        if (addrMatch[2]) addr += ' ' + addrMatch[2];
+        document.getElementById('customerAddress').value = capitalize(addr);
+    }
+    
+    // 5. Phone: XXX-XXX-XXXX pattern
+    var phoneRegex = /\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/;
+    var phoneMatch = text.match(phoneRegex);
+    if (phoneMatch) {
+        document.getElementById('customerContact').value = phoneMatch[0];
+    }
+    
+    // 6. Project: look for common project words
+    var projects = ['kitchen remodel','bathroom remodel','deck','roof','flooring','tile','painting','windows','siding'];
+    for (var i = 0; i < projects.length; i++) {
+        if (text.indexOf(projects[i]) !== -1) {
+            document.getElementById('projectDesc').value = capitalize(projects[i]);
+            break;
+        }
+    }
+    // Also check for "[room] remodel" pattern
+    if (!document.getElementById('projectDesc').value) {
+        var projRegex = /(?:remodel|renovate|fix|repair)\s+(?:the\s+|this\s+)?(\w+)/i;
+        var projMatch = text.match(projRegex);
+        if (projMatch) {
+            document.getElementById('projectDesc').value = capitalize(projMatch[1]) + ' Remodel';
+        }
+    }
+    
+    // 7. Add line items
+    var tbody = document.getElementById('lineItemsBody');
+    var existingRows = tbody.querySelectorAll('.line-item-row');
+    existingRows.forEach(function(row) {
+        var descInput = row.querySelector('input[type="text"]');
+        var amtInput = row.querySelector('input[type="number"]');
+        if (!descInput.value && !amtInput.value) {
+            row.remove();
+        }
+    });
+    
+    var addedPrices = {};
+    priceItems.forEach(function(item) {
+        if (addedPrices[item.price]) return;
+        var desc = capitalize(item.desc);
+        if (desc.length < 2) desc = document.getElementById('projectDesc').value || 'Work';
+        addLineItem(desc, item.price);
+        addedPrices[item.price] = true;
+        itemsFound++;
+    });
+    
+    if (document.querySelectorAll('.line-item-row').length === 0) {
+        addLineItem();
+    }
+    calculateTotal();
+    
+    // Report
+    document.getElementById('statusText').classList.remove('processing');
+    var found = [];
+    if (document.getElementById('customerName').value) found.push('name');
+    if (document.getElementById('customerAddress').value) found.push('address');
+    if (document.getElementById('customerContact').value) found.push('phone');
+    if (document.getElementById('projectDesc').value) found.push('project');
+    if (itemsFound > 0) found.push(itemsFound + ' item(s)');
+    
+    if (found.length > 0) {
+        document.getElementById('statusText').textContent = 'Found: ' + found.join(', ') + '. Review and edit.';
+        showToast('Parsed successfully!', 'success');
+    } else {
+        document.getElementById('statusText').textContent = 'Could not parse. Try again or add manually.';
+        showToast('Could not parse input', 'error');
+    }
+}
+
+// Line Items
+function addLineItem(description, amount) {
+    lineItemCounter++;
+    var tbody = document.getElementById('lineItemsBody');
+    var row = document.createElement('tr');
+    row.className = 'line-item-row';
+    row.dataset.id = lineItemCounter;
+    row.innerHTML = '<td>' + lineItemCounter + '</td>' +
+        '<td><input type="text" placeholder="Description" value="' + (description || '') + '" onchange="calculateTotal()"></td>' +
+        '<td><button class="delete-item-btn" onclick="deleteLineItem(' + lineItemCounter + ')" title="Delete">' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button></td>' +
+        '<td><input type="number" placeholder="0.00" step="0.01" value="' + (amount || '') + '" onchange="calculateTotal()"></td>';
+    tbody.appendChild(row);
+    calculateTotal();
+}
+
+function deleteLineItem(id) {
+    var row = document.querySelector('.line-item-row[data-id="' + id + '"]');
+    if (row) { row.remove(); calculateTotal(); }
+}
+
+function calculateTotal() {
+    var rows = document.querySelectorAll('.line-item-row');
+    var total = 0;
+    rows.forEach(function(row) {
+        var amt = row.querySelector('input[type="number"]');
+        if (amt && amt.value) total += parseFloat(amt.value) || 0;
+    });
+    document.getElementById('grandTotal').textContent = '$' + total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+}
+
+// Document Type
+function setDocType(type) {
+    currentDoc.type = type;
+    document.querySelectorAll('.doc-type-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.type === type);
+    });
+    document.getElementById('docTitle').textContent = type === 'invoice' ? 'Invoice' : 'Estimate';
+    document.getElementById('convertBtn').innerHTML = (type === 'invoice' ? 
+        '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/></svg> Convert to Estimate' :
+        '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/></svg> Convert to Invoice');
+    generateDocNumber();
+}
+
+function generateDocNumber() {
+    var prefix = currentDoc.type === 'invoice' ? 'INV' : 'EST';
+    var saved = JSON.parse(localStorage.getItem('haibonDocs') || '[]');
+    var count = saved.filter(function(d) { return d.type === currentDoc.type; }).length + 1;
+    currentDoc.number = prefix + '-' + String(count).padStart(3, '0');
+    document.getElementById('docNumber').textContent = '#' + currentDoc.number;
+}
+
+function convertDocument() {
+    setDocType(currentDoc.type === 'estimate' ? 'invoice' : 'estimate');
+    showToast('Converted to ' + currentDoc.type + '!', 'success');
+}
+
+// Save / Load
+function gatherDocumentData() {
+    var rows = document.querySelectorAll('.line-item-row');
+    var lineItems = [];
+    rows.forEach(function(row) {
+        var desc = row.querySelector('input[type="text"]');
+        var amt = row.querySelector('input[type="number"]');
+        if (desc.value || amt.value) {
+            lineItems.push({description: desc.value, amount: parseFloat(amt.value) || 0});
+        }
+    });
+    return {
+        id: currentDoc.id || Date.now(),
+        type: currentDoc.type,
+        number: currentDoc.number,
+        customerName: document.getElementById('customerName').value,
+        customerAddress: document.getElementById('customerAddress').value,
+        customerContact: document.getElementById('customerContact').value,
+        date: document.getElementById('docDate').value,
+        projectDesc: document.getElementById('projectDesc').value,
+        lineItems: lineItems,
+        notes: document.getElementById('docNotes').value,
+        total: document.getElementById('grandTotal').textContent,
+        createdAt: currentDoc.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    };
+}
+
+function saveDocument() {
+    var docData = gatherDocumentData();
+    var saved = JSON.parse(localStorage.getItem('haibonDocs') || '[]');
+    var idx = saved.findIndex(function(d) { return d.id === docData.id; });
+    if (idx >= 0) saved[idx] = docData; else saved.push(docData);
+    localStorage.setItem('haibonDocs', JSON.stringify(saved));
+    currentDoc.id = docData.id;
+    currentDoc.createdAt = docData.createdAt;
+    showToast('Document saved!', 'success');
+}
+
+function loadDocument(id) {
+    var saved = JSON.parse(localStorage.getItem('haibonDocs') || '[]');
+    var doc = saved.find(function(d) { return d.id === id; });
+    if (!doc) return;
+    currentDoc = {id: doc.id, type: doc.type, number: doc.number, createdAt: doc.createdAt};
+    setDocType(doc.type);
+    document.getElementById('docNumber').textContent = '#' + doc.number;
+    document.getElementById('customerName').value = doc.customerName || '';
+    document.getElementById('customerAddress').value = doc.customerAddress || '';
+    document.getElementById('customerContact').value = doc.customerContact || '';
+    document.getElementById('docDate').value = doc.date || '';
+    document.getElementById('projectDesc').value = doc.projectDesc || '';
+    document.getElementById('docNotes').value = doc.notes || '';
+    document.getElementById('lineItemsBody').innerHTML = '';
+    lineItemCounter = 0;
+    if (doc.lineItems && doc.lineItems.length > 0) {
+        doc.lineItems.forEach(function(item) { addLineItem(item.description, item.amount); });
+    } else { addLineItem(); }
+    calculateTotal();
+    closeSavedDocs();
+    showToast('Document loaded!', 'success');
+}
+
+function deleteDocument(id, event) {
+    event.stopPropagation();
+    if (!confirm('Delete this document?')) return;
+    var saved = JSON.parse(localStorage.getItem('haibonDocs') || '[]');
+    saved = saved.filter(function(d) { return d.id !== id; });
+    localStorage.setItem('haibonDocs', JSON.stringify(saved));
+    renderSavedDocs();
+    showToast('Document deleted', 'success');
+}
+
+// Modal
+function openSavedDocs() {
+    renderSavedDocs();
+    document.getElementById('savedDocsModal').classList.add('active');
+}
+
+function closeSavedDocs() {
+    document.getElementById('savedDocsModal').classList.remove('active');
+}
+
+function renderSavedDocs() {
+    var container = document.getElementById('savedDocsList');
+    var saved = JSON.parse(localStorage.getItem('haibonDocs') || '[]');
+    if (saved.length === 0) {
+        container.innerHTML = '<div class="no-docs-message">No saved documents yet.</div>';
+        return;
+    }
+    saved.sort(function(a, b) { return new Date(b.updatedAt) - new Date(a.updatedAt); });
+    container.innerHTML = saved.map(function(doc) {
+        return '<div class="saved-doc-item" onclick="loadDocument(' + doc.id + ')">' +
+            '<h4>' + (doc.type === 'invoice' ? '📄' : '📝') + ' ' + doc.number + ' - ' + (doc.customerName || 'No Customer') + '</h4>' +
+            '<div class="saved-doc-meta"><span>' + doc.type + '</span><span>' + doc.total + '</span></div>' +
+            '<div class="saved-doc-actions"><button class="action-btn btn-secondary" style="padding:0.25rem 0.5rem;font-size:0.75rem" onclick="deleteDocument(' + doc.id + ', event)">Delete</button></div></div>';
+    }).join('');
+}
+
+function newDocument() {
+    if (!confirm('Start new document? Unsaved changes will be lost.')) return;
+    currentDoc = {id: null, type: 'estimate', number: '', createdAt: null};
+    document.getElementById('customerName').value = '';
+    document.getElementById('customerAddress').value = '';
+    document.getElementById('customerContact').value = '';
+    document.getElementById('docDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('projectDesc').value = '';
+    document.getElementById('docNotes').value = '';
+    document.getElementById('lineItemsBody').innerHTML = '';
+    lineItemCounter = 0;
+    setDocType('estimate');
+    generateDocNumber();
+    addLineItem();
+    document.getElementById('statusText').textContent = 'Tap microphone to start';
+    document.getElementById('transcriptPreview').textContent = '';
+    showToast('New document started', 'success');
+}
+
+function showToast(message, type) {
+    var toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast show ' + (type || '');
+    setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+
+document.getElementById('savedDocsModal').addEventListener('click', function(e) {
+    if (e.target === this) closeSavedDocs();
+});
+</script>
+
+</body>
+</html>
